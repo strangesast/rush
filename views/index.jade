@@ -6,37 +6,44 @@ block content
       span.icon
         a(href='/') sportsync
       .items
-        .dropdown#account-dropdown-container
-          button#account-drop.btn.btn-default.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true')
-            | Account 
-            span.caret
-          ul.dropdown-menu.dropdown-menu-right(aria-labelledby='account-drop')
-            li
-              a(href='/account/login') Log in
-            li
-              a(href='/account/register') Register
-            li.divider(role='separator')
-            li
-              a(href='#') Admin
+        if user
+          a(href="/#/account/") #{user.username}
 
-        a.btn(href='/account/register') Register
-        a.btn.btn-primary(href='/account/login') Log in
+        else
+          .dropdown#account-dropdown-container
+            button#account-drop.btn.btn-default.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true')
+              | Account 
+              span.caret
+            ul.dropdown-menu.dropdown-menu-right(aria-labelledby='account-drop')
+              li
+                a(href='/account/login') Log in
+              li
+                a(href='/account/register') Register
+              li.divider(role='separator')
+              li
+                a(href='#') Admin
+
+          a.btn(href='/account/register') Register
+          a.btn.btn-primary(href='/account/login') Log in
       
     .center
       #wrapper.wrapper
         .outer#index(hash-url='index', static=true)
           .inner
             h1 Welcome!
-            h3 Manage a
-            select
-              option Track
-              option Soccer
-              option Swimming
-            h3 event
+            h3
+              | Manage a 
+              //select.selectpicker
+              select#game-select
+                option(value="soccer") Soccer
+                option(value="frisbe") Frisbe
+                option(value="swimming") Swimming
+              | 
+              span#game-noun game
+            button#start-button.btn.btn-default.btn-lg Start!
 
-            if user
-              p Welcome #{user.name}
-            else
-              p Not logged in
     .foot
       span sportsync
+
+block scripts
+  script(src='/javascripts/index.js')

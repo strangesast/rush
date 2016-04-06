@@ -1,11 +1,13 @@
 var express = require('express');
 var passport = require('passport');
 var multer = require('multer');
+var Account = require('../models/account/account.js');
+
 var upload = multer();
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('account', { title: 'your account' });
+  res.redirect('/#/account');
 });
 
 router.route('/register')
@@ -13,7 +15,7 @@ router.route('/register')
   return res.render('account/register');
 });
 
-router.post('/register', upload.array('profileImage', 'profileImageFile'), function(req, res, next) {
+router.post('/register', upload.array(), function(req, res, next) {
   var admin = req.body.username === 'admin' ? true : false;
   var buffer;
 
@@ -35,12 +37,13 @@ router.post('/register', upload.array('profileImage', 'profileImageFile'), funct
 
 router.route('/login')
 .get(function(req, res) {
-  return res.render('account/login');
+  return res.render('account/login', {errors: req.flash('error')});
 })
 .post(passport.authenticate('local', {
   failureFlash: true,
   failureRedirect: '/account/login'
 }), function(req, res) {
+  console.log(req.body)
   var defaultRedirect = '/account/';
   return res.redirect(req.query.ref || defaultRedirect);
 });

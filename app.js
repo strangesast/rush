@@ -32,17 +32,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.secret));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// add user to all templating
-app.use(function(req, res, next) {
-  if(req.user) {
-    res.locals.user = req.user;
-  }
-  return next();
-});
-// routes implementation
-app.use('/', routes);
-app.use('/account/', account);
-
 // redis
 var RedisStore = connectRedis(expressSession);
 var sessionStore = new RedisStore();
@@ -66,6 +55,14 @@ passport.use(new passportLocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
+// add user to all templating
+app.use(function(req, res, next) {
+  if(req.user) {
+    res.locals.user = req.user;
+  }
+  return next();
+});
+
 mongoose.connect(config.databaseURL, function(err) {
   if(err) {
     console.log("error connecting to " + config.databaseURL);
@@ -73,6 +70,10 @@ mongoose.connect(config.databaseURL, function(err) {
     console.log("connected to mongodb at " + config.databaseURL);
   }
 });
+
+// routes implementation
+app.use('/', routes);
+app.use('/account/', account);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

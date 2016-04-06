@@ -1,0 +1,24 @@
+.outermost {
+  flex-direction: column;
+}
+.account-container {
+  color: white;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 100%;
+  align-content: flex-start;
+}
+.account-container > form {
+  min-width: 300px;
+}
+.account-container > .branding {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  margin: 0 5%;
+  height: 80px;
+}
+.account-container > .branding > span {
+  padding: 10px;
+}

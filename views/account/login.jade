@@ -1,0 +1,26 @@
+extends ../layout
+
+block head
+  link(href='/stylesheets/account.css', rel='stylesheet')
+  
+block content
+  .outermost
+    .account-container
+      .branding
+        span.icon
+          a(href='/') sportsync
+      form#sign-in-form.form-signin(role='form', action='/account/login', method='POST')
+        h2.form-signin-heading Log in
+        .form-group
+          input.form-control(type='username', name='username', placeholder='username')
+        .form-group
+          input.form-control(type='password', name='password', placeholder='password')
+        button.btn.btn-primary.btn-block(type='submit') Submit
+
+        h3.form-signin-heading No account?
+        a.btn.btn-default.btn-block(href='./register') Register
+      
+        if errors
+          if errors.length
+            h2 Errors!
+            p=errors

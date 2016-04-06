@@ -32,7 +32,7 @@ html, body {
   flex-direction: row-reverse;
   align-items: center;
 }
-.outermost > .head > span.icon > a {
+span.icon > a {
   font-size: 2em;
   line-height: 50px;
   color: white;
@@ -91,6 +91,7 @@ html, body {
 }
 .inner {
   max-height: 100%;
+  min-height: 300px;
   min-width: 200px;
   display: flex;
   flex-wrap: wrap;
@@ -98,12 +99,18 @@ html, body {
   margin: 10px;
   overflow-y: auto;
 }
-.inner > h1, h3, p, span {
+.inner > h1, .inner > h3, .inner > p, .inner > span {
   color: white;
   text-shadow: 1px 1px 4px #2a5a83;
 }
+.inner > h3 > select {
+  color: black;
+}
+.inner > h3 > select > option{
+  text-shadow: none;
+}
 
-.head > .items  a {
+.head > .items > a {
   color: white;
 }
 .head > .items > #account-dropdown-container {
