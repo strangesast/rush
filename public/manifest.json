@@ -1,0 +1,29 @@
+{
+  "name": "Sportsync",
+  "description": "Pithy scoreboard app",
+  "version": "0.0.0.1",
+  "manifest_version": 2,
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/icon32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "density": 0.75
+    },
+    {
+      "src": "images/icon64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "density": 1.0
+    },
+    {
+      "src": "images/icon128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "density": 1.5
+    }
+  ],
+  "start_url": "/"
+}

@@ -1,0 +1,19 @@
+doctype html
+html(lang='en')
+  head
+    title #{title ? "sportsync: " + title : sportsync}
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='theme-color' content='#2a5a83')
+    link(rel='manifest', href='manifest.json')
+    link(rel='icon', sizes='192x192', href='images/icon192.png')
+    link(rel='shortcut icon', href='/images/icon64.png', type='image/x-icon')
+    link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    block head
+
+  body
+    block content
+
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    block scripts

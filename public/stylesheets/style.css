@@ -1,0 +1,183 @@
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font: 1em "Open Sans", sans-serif;
+}
+@font-face {
+  font-family: "Open Sans";
+  src:
+    local("Open Sans"),
+    url("/components/open-sans-fontface/fonts/Regular/OpenSans-Regular.ttf");
+}
+.outermost {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: darkgrey;
+  background-image: linear-gradient(to bottom, rgba(41,137,216,0.5) 0%,rgba(41,137,216,0.5) 34%,rgba(125,185,232,0.5) 100%), url("/images/noise.png");
+}
+.outermost > .head {
+  height: 80px;
+  display: flex;
+  align-items: stretch;
+  margin: 0 5%;
+}
+.outermost > .head > * {
+  margin: 10px;
+}
+.outermost > .head > .items {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.outermost > .head > span.icon > a {
+  font-size: 2em;
+  line-height: 50px;
+  color: white;
+  text-decoration: none;
+  text-shadow: 1px 1px 4px #2a5a83;
+}
+.outermost > .center {
+  flex-grow: 2;
+  position: relative;
+}
+.outermost > .foot {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+}
+.outermost > .foot > span {
+  margin: 12px;
+  line-height: 55px;
+  color: white;
+  text-shadow: 1px 1px 4px #2a5a83;
+}
+.wrapper {
+}
+.wrapper > .outer:not(:first-child) {
+  visibility: hidden;
+  opacity: 0;
+}
+.wrapper.loading > .outer {
+  visibility: hidden;
+  opacity: 0;
+}
+.wrapper > .outer {
+}
+.wrapper > .outer.transitioning {
+  visibility: visible;
+  display: flex;
+}
+.wrapper > .outer.active {
+  visibility: visible;
+  opacity: 1;
+}
+.wrapper > .outer.transitioning > .inner {
+  transition: transform 0.5s ease;
+}
+.outer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+}
+.inner {
+  max-height: 100%;
+  min-width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: 10px;
+  overflow-y: auto;
+}
+.inner > h1, h3, p, span {
+  color: white;
+  text-shadow: 1px 1px 4px #2a5a83;
+}
+
+.head > .items  a {
+  color: white;
+}
+.head > .items > #account-dropdown-container {
+  display: none;
+}
+
+@media(max-width: 400px) {
+  .head > .items > #account-dropdown-container {
+    display: inherit;
+  }
+  .head > .items > *:not(#account-dropdown-container) {
+    display: none;
+  }
+}
+/*
+
+.inner > .main {
+  padding: 20px;
+  font-size: 5em;
+  width: 100%;
+  color: rgba(0, 10, 50);
+}
+
+#option {
+  align-self: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#option > * {
+  margin: 10px 0px;
+}
+
+#count {
+  height: 220px;
+  line-height:220px;
+  font-size: 3em;
+  font-align: middle
+}
+
+#pass {
+  height: 50px;
+  font-size: 1.5em;
+}
+
+@media (max-width: 300px ){
+  .usernames {
+    max-width: 300px; 
+  }
+}
+*/
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.btn:focus {
+  outline: none;
+}

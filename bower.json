@@ -1,0 +1,19 @@
+{
+  "name": "sportsync",
+  "authors": [
+    "Sam Zagrobelny <strangesast@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "open-sans-fontface": "^1.4.2"
+  }
+}
