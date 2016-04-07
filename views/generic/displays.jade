@@ -1,0 +1,8 @@
+.inner
+  h1 Displays
+  if displays
+    each display in displays
+      pre=JSON.stringify(display, null, 2)
+  
+  else
+    p no displays

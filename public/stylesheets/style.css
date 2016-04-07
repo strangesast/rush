@@ -44,6 +44,7 @@ span.icon > a {
   position: relative;
   max-width: 100vw;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .welcome-page {
   align-items: stretch;
@@ -128,7 +129,7 @@ span.icon > a {
   flex-wrap: wrap;
   flex-direction: row;
   margin: 10px;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   padding: 0 8px;
 }
 .inner > h1, .inner > h3, .inner > p, .inner > span {

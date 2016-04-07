@@ -1,0 +1,8 @@
+.inner
+  h1 Teams
+  if teams.length > 0
+    each team in teams
+      pre=JSON.stringify(team, null, 2)
+
+  else
+    p no teams

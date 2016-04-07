@@ -8,6 +8,9 @@ var Frisbe = require('../models/frisbe');
 var Swimming = require('../models/swimming');
 var Track = require('../models/track');
 var Soccer = require('../models/soccer');
+var Player = require('../models/player');
+var Team = require('../models/team');
+var Display = require('../models/display');
 
 var gameTypes = {'frisbe': Frisbe, 'swimming': Swimming, 'track': Track, 'soccer': Soccer};
 
@@ -137,6 +140,70 @@ router.get('/:gameType/events', function(req, res, next) {
 });
 
 router.get('/:gameType/events/:eventId', function(req, res, next) {
+  var gameType = req.params.eventId;
+  req.gameType.findById(req.params.eventId).populate('owner').then(function(doc) {
+    if(doc) {
+      // doc found!
+      return tryWithFallbackGeneric(res, gameType, 'each', {object: doc}, gameType).then(function(result) {
+        // rendered successfully
+        return res.json(result);
+      }).catch(genericFailureFactory(next));
+    } else {
+      // not found
+      return next();
+    }
+
+  }).catch(genericFailureFactory(next));
+});
+
+// this needs to be replaced
+router.get('/:gameType/events/:eventId/players', function(req, res, next) {
+  var eventId = req.params.eventId;
+  var gameType = req.params.gameType;
+  return req.gameType.findById(eventId).then(function(game_doc) {
+    return Team.find({id: { $in: game_doc.participants }}).select('id').then(function(team_docs) {
+      return Player.find({team: { $in : team_docs }}).then(function(player_docs) {
+        // doc found!
+        return tryWithFallbackGeneric(res, gameType, 'players', {players: player_docs}, gameType).then(function(result) {
+          // rendered successfully
+          return res.json(result);
+        });
+      });
+    });
+  }).catch(genericFailureFactory(next));
+});
+
+// this needs to be replaced
+router.get('/:gameType/events/:eventId/teams', function(req, res, next) {
+  var eventId = req.params.eventId;
+  var gameType = req.params.gameType;
+  return req.gameType.findById(eventId).then(function(game_doc) {
+    console.log(game_doc.participants);
+    return Team.find({id: { $in: game_doc.participants }}).select('id').then(function(team_docs) {
+      // doc found!
+      return tryWithFallbackGeneric(res, gameType, 'teams', {teams: team_docs}, gameType).then(function(result) {
+        // rendered successfully
+        return res.json(result);
+      });
+    });
+  }).catch(genericFailureFactory(next));
+});
+
+// this needs to be replaced
+router.get('/:gameType/events/:eventId/displays', function(req, res, next) {
+  var eventId = req.params.eventId;
+  var gameType = req.params.gameType;
+  return Display.find({event: eventId}).then(function(display_docs) {
+    // doc found!
+    return tryWithFallbackGeneric(res, gameType, 'displays', {teams: display_docs}, gameType).then(function(result) {
+      // rendered successfully
+      return res.json(result);
+    });
+  }).catch(genericFailureFactory(next));
+});
+
+
+router.get('/:gameType/events/:eventId/displays', function(req, res, next) {
   var gameType = req.params.eventId;
   req.gameType.findById(req.params.eventId).populate('owner').then(function(doc) {
     if(doc) {

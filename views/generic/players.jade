@@ -1,0 +1,10 @@
+.inner
+  h1 Players
+  if players.length > 0
+    each player in players
+      pre=JSON.stringify(player, null, 2)
+
+  else
+    p no players
+
+  // create new players
