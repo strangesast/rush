@@ -76,16 +76,22 @@ router.get('/account', function(req, res, next) {
 });
 
 router.get('/account/events', function(req, res, next) {
-  Game.find({owner: req.user._id}).then(function(docs) {
-    return tryToRender(res, 'account/events', {events: docs}).then(function(html) {
-      return res.json({
-        hash: '/account/events',
-        html: html
+  if(req.user) {
+    Game.find({owner: req.user._id}).then(function(docs) {
+      return tryToRender(res, 'account/events', {events: docs}).then(function(html) {
+        return res.json({
+          hash: '/account/events',
+          html: html
+        });
+      }).catch(function(err) {
+        return next(err);
       });
-    }).catch(function(err) {
-      return next(err);
     });
-  });
+  } else {
+    var err = new Error('not logged in');
+    err.status = 403;
+    return next(err);
+  }
 });
 
 router.param('gameType', function(req, res, next, gameType) {

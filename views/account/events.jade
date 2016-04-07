@@ -1,5 +1,5 @@
 div
-  if events
+  if events && events.length
     div
       each event in events
         div
@@ -7,4 +7,6 @@ div
           p #{event.date}
           a.btn.btn-default(href='/#/#{event._type.toLowerCase()}/events/#{event._id}') More info
   else
-    p No events for this user
+    p You haven't created any events
+
+  a.btn.btn-default(href="/#/index") Create a new event
