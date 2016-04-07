@@ -78,10 +78,19 @@ var loadByHash = function(raw_hashUrl) {
         wrapperElement.appendChild(div);
       }
 
-      // probably 'dangerous'
+      // probably 'dangerous', and holy balls gross
       var scripts = div.getElementsByTagName('script');
       for(var i=0; i < scripts.length; i++) {
-        eval(scripts[i].innerHTML);
+        var script = scripts[i];
+        if(script.src) {
+          general.makeRequest(script.src, 'GET').then(function(request) {
+            script.removeAttribute('src');
+            script.innerHTML = request.responseText;
+            eval(script.innerHTML)
+          });
+        } else {
+          eval(script.innerHTML);
+        }
       }
     });
   }
