@@ -1,7 +1,10 @@
 div
   if events
-    ul
+    div
       each event in events
-        li=event
+        div
+          h2 #{event.name} (#{event._type})
+          p #{event.date}
+          a.btn.btn-default(href='/#/#{event._type.toLowerCase()}/events/#{event._id}') More info
   else
     p No events for this user

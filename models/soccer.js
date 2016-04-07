@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var GameSchema = require('./gameschema');
+var extend = require('mongoose-schema-extend');
 
-Soccer = new Schema({
-  name: String,
-  date: Date
-});
+Soccer = GameSchema.extend({});
 
 module.exports = mongoose.model('Soccer', Soccer);

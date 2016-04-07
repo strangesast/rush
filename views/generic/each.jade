@@ -1,5 +1,13 @@
-div
-  h1 #{object.name}
+div.inner
+  h1.welcome-container #{object.name}
+  div
+    ul
+      li Owner: #{object.owner.name}
+      li Date: #{object.date}
   pre=JSON.stringify(object, null, 2)
 
-  h2 Add players or teams to your event
+  if (user && user.id == object.owner._id)
+    h2.welcome-container Add players or teams to your event
+    .options
+      a.btn.btn-default(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/players') Players
+      a.btn.btn-default(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/teams') Teams

@@ -49,6 +49,9 @@ var loadByHash = function(raw_hashUrl) {
     var parsed;
     promise = general.makeRequest(fullUrl, 'GET').then(function(request) {
       parsed = JSON.parse(request.responseText);
+      if('redirect' in parsed) {
+        window.location.href = parsed.redirect;
+      }
       newHashUrl = parsed.hash;
       return parsed.html;
 
