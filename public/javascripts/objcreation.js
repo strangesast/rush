@@ -13,10 +13,17 @@ newObjectForm.onsubmit = function(e) {
     var parsed;
     try {
       parsed = JSON.parse(request.responseText);
-    } catch (e) {}
-    console.log(parsed);
+    } catch (e) {
+      parsed = null;
+    }
+    if(parsed && 'hash' in parsed){
+      window.location.hash = parsed.hash;
+    } else {
+      return Promise.reject('unrecognized error');
+    }
+
   }).catch(function(err) {
-    console.log("error");
+    alert("error");
     console.log(err);
   });
 
