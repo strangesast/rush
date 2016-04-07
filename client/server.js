@@ -1,21 +1,30 @@
-var mongodb = require('mongodb');
-var MongoClient = mongodb.MongoClient
+var express = require('express');
+var mongoose = require('mongoose');
+
+var Action = require('./models/action');
+
+var app = express();
 var config = require('./config');
 
-MongoClient.connect(config.databaseURL, function(err, db) {
+mongoose.connect(config.databaseURL, function(err, db) {
   if(err) throw err;
+  console.log("connected to databse at " + config.databaseURL);
 
-  //db.collections(function(err, collections) {
-  //  if(err) throw err;
-  //  for(var col_i in collections) {
-  //    console.log(collections[col_i].s.name);
-  //    for(var prop in collections[col_i]) {
-  //    }
-  //  }
-  //});
+  var stream = Action.find().tailable(true, {
+    tailable: true,
+    awaitdata: true,
+    numberOfRetries: Number.MAX_VALUE
+  }).stream();
 
-  var gamestates = db.collection('gamestates');
-  gamestates.find({}).addCursorFlag('tailable', true).toArray(function(err,docs) {
-    console.log(docs);
+  stream.on('data', function(doc) {
+    console.log(doc);
+  });
+
+  app.get('/', function(req, res) {
+    res.send("helloo");
+  });
+
+  app.listen(config.port, function() {
+    console.log('listening on port ' + config.port);
   });
 });

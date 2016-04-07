@@ -11,7 +11,8 @@ var Action = new Schema({
     ref: 'Account'
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  capped: 1024*100
 });
 
 module.exports = mongoose.model('Action', Action);

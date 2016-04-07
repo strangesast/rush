@@ -10,6 +10,7 @@
   "author": "Sam Zagrobelny <strangesast@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.13.4",
     "mongodb": "^2.1.15",
     "mongoose": "^4.4.11",
     "mongoose-schema-extend": "^0.2.2"
