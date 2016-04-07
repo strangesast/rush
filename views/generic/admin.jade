@@ -2,6 +2,8 @@
   // gamestate stuff
   h1 Admin for #{game.name}
 
+  pre=JSON.stringify(game, null, 2)
+
   if game.state
     h3 Players
     each player in game.state.players

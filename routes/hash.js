@@ -256,12 +256,16 @@ router.get('/frisbe/events/:eventId/admin/init', function(req, res, next) {
       res.status(400);
       return res.json({'error': err, 'message' : err.message});
     }
-    game_doc.state = new GameStateFrisbe({
-      team0: this.teams[0],
-      team1: this.teams[1]
+    var gamestate = new GameStateFrisbe({
+      team0: game_doc.teams[0],
+      team1: game_doc.teams[1]
     });
-    game_doc.save();
-    return res.json({game: game_doc});
+    return gamestate.save().then(function(gamestate_doc) {
+      game_doc.state = gamestate_doc._id;
+      game_doc.save().then(function(doc) {
+        return res.json({game: doc});
+      });
+    });
   }).catch(genericFailureFactory(next));
 });
 
