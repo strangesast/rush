@@ -1,2 +1,40 @@
 div
-  p New #{name}
+  form#new-object-form(role='form', action='/hash/#{objectname}/new', method='POST')
+    h2.form-signin-heading New #{objectname} event
+    .form-group
+      input.form-control(type='text', name='name', placeholder='event name')
+    .form-group
+      input.form-control(type='datetime-local', name='date', value=(new Date()).toISOString().slice(0, 16))
+  
+    button.btn.btn-primary.btn-block(type='submit') Submit
+  
+    if errors
+      if errors.length
+        h2 Errors!
+        p=errors
+
+  script.
+    var newObjectForm = document.getElementById('new-object-form');
+    console.log(newObjectForm);
+    
+    newObjectForm.onsubmit = function(e) {
+      e.preventDefault();
+    
+      var formData = new FormData(newObjectForm);
+  
+      var action = newObjectForm.getAttribute('action');
+      console.log(action);
+    
+      general.makeRequest(action, 'POST', formData, null, null).then(function(request) {
+        var parsed;
+        try {
+          parsed = JSON.parse(request.responseText);
+        } catch (e) {}
+        console.log(parsed);
+      }).catch(function(err) {
+        console.log("error");
+        console.log(err);
+      });
+    
+      return false;
+    };

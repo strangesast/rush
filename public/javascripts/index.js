@@ -46,24 +46,28 @@ var loadByHash = function(raw_hashUrl) {
   var promise = Promise.resolve();
   if(!(existingElement && existingElement.hasAttribute('static'))) {
     var fullUrl = '/hash/' + hashUrl;
+    var parsed;
     promise = general.makeRequest(fullUrl, 'GET').then(function(request) {
-      var parsed = JSON.parse(request.responseText);
+      parsed = JSON.parse(request.responseText);
       newHashUrl = parsed.hash;
       return parsed.html;
 
     }).catch(function(request) {
       // create 4XX / 5XX html
-      return "<div><h1>4XX/5XX Error</h1></div>";
+      try {
+        parsed = JSON.parse(request.responseText);
+      } catch (e) {}
+      if(parsed && parsed.html) {
+        return parsed.html;
+      } else if(request.responseText) {
+        return "<div><pre>" + request.responseText + "</pre></div>";
+      } else {
+        return "<div><h1>4XX/5XX Error</h1></div>";
+      }
 
     }).then(function(html) {
       var div = general.createElementWithProp('div', {'hash-url': newHashUrl, 'class':'outer'});
       div.innerHTML = html;
-
-      // probably 'dangerous'
-      var scripts = div.getElementsByTagName('script');
-      for(var i=0; i < scripts.length; i++) {
-        eval(scripts[i].innerHTML);
-      }
 
       if(existingElement) {
         if(existingElement.hasAttribute('static')) {
@@ -72,6 +76,12 @@ var loadByHash = function(raw_hashUrl) {
         wrapperElement.replaceChild(div, existingElement);
       } else {
         wrapperElement.appendChild(div);
+      }
+
+      // probably 'dangerous'
+      var scripts = div.getElementsByTagName('script');
+      for(var i=0; i < scripts.length; i++) {
+        eval(scripts[i].innerHTML);
       }
     });
   }
@@ -202,25 +212,3 @@ startButton.addEventListener('click', function(evt) {
     alert("invalid game type");
   }
 });
-
-// form example
-//var username_submit_form = document.getElementById('username-submit-form');
-//
-//username_submit_form.onsubmit = function(e) {
-//  e.preventDefault();
-//
-//  var formData = new FormData(username_submit_form);
-//
-//  general.makeRequest('/account', 'POST', formData, null, null).then(function(request) {
-//    var parsed = JSON.parse(request.responseText);
-//    console.log(parsed);
-//    if('username' in parsed) {
-//      sessionStorage.setItem('activePlayer', JSON.stringify(parsed));
-//      window.location.hash = "/play";
-//    } else {
-//      alert('unexpected result');
-//    }
-//  });
-//
-//  return false;
-//};
