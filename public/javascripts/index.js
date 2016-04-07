@@ -34,21 +34,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // load content at hash url
 var loadByHash = function(raw_hashUrl) {
-  console.log(raw_hashUrl);
   // clean up trailing / leading '/'s
   var hashUrl = raw_hashUrl.split('/').filter(function(e){return e;}).join('/');
+  var newHashUrl = hashUrl;
+
   if(hashUrl === "") {
     hashUrl = 'index';
-  } else if (hashUrl === "play") {
-    var activePlayerRaw = sessionStorage.getItem('activePlayer');
-    if(!activePlayerRaw) {
-      changeHashWithoutEvent('#/index');
-      hashUrl = 'index';
-    } else {
-      initGame();
-    }
   }
-  setActiveTo(hashUrl, true, false);
+  // check that a view aleady exists
+  var existingElement = wrapperElement.querySelector('[hash-url="' + hashUrl + '"]');
+
+  var promise = Promise.resolve();
+  if(!(existingElement && existingElement.hasAttribute('static'))) {
+    var fullUrl = '/hash/' + hashUrl;
+    promise = general.makeRequest(fullUrl, 'GET').then(function(request) {
+      var parsed = JSON.parse(request.responseText);
+      newHashUrl = parsed.hash;
+      return parsed.html;
+
+    }).catch(function(request) {
+      // create 4XX / 5XX html
+      return "<div><h1>4XX/5XX Error</h1></div>";
+
+    }).then(function(html) {
+      var div = general.createElementWithProp('div', {'hash-url': newHashUrl, 'class':'outer'});
+      div.innerHTML = html;
+
+      // probably 'dangerous'
+      var scripts = div.getElementsByTagName('script');
+      for(var i=0; i < scripts.length; i++) {
+        eval(scripts[i].innerHTML);
+      }
+
+      if(existingElement) {
+        if(existingElement.hasAttribute('static')) {
+          div.setAttribute('static', '');
+        }
+        wrapperElement.replaceChild(div, existingElement);
+      } else {
+        wrapperElement.appendChild(div);
+      }
+    });
+  }
+
+  promise.then(function() {
+    setActiveTo(newHashUrl, true, false);
+  });
 };
 
 var transition = function(firstElement, secondElement, transformType) {
@@ -111,6 +142,9 @@ var getTransitionType = function(rev) {
 var setActiveTo = function(loc, animate, _long) {
   var selector = '[hash-url="' + loc + '"]';
   var div = wrapperElement.querySelector('[hash-url="' + loc + '"]');
+  if(!div) {
+    alert("dom element doesn't exist");
+  }
   var oldDiv = wrapperElement.querySelector('.active');
   var loadingDiv = wrapperElement.querySelector('[hash-url="loading"]');
 
@@ -158,7 +192,7 @@ startButton.addEventListener('click', function(evt) {
   console.log(evt);
   var val;
   if(val=gameSelect.value) {
-    console.log('/' + val + '/new');
+    window.location.hash = '/' + val + '/new';
   } else {
     alert("invalid game type");
   }

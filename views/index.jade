@@ -10,7 +10,7 @@ block content
           a(href="/#/account/") #{user.username}
 
         else
-          .dropdown#account-dropdown-container
+          .dropdown.alink#account-dropdown-container
             button#account-drop.btn.btn-default.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true')
               | Account 
               span.caret
@@ -23,16 +23,16 @@ block content
               li
                 a(href='#') Admin
 
-          a.btn(href='/account/register') Register
-          a.btn.btn-primary(href='/account/login') Log in
+          a.alink.btn(href='/account/register') Register
+          a.alink.btn.btn-primary(href='/account/login') Log in
       
     .center
       #wrapper.wrapper
-        .outer#index(hash-url='index', static=true)
+        .outer#index(hash-url='index', static=true).active
           .inner
             h1 Welcome!
             h3
-              | Manage a 
+              | Create a 
               //select.selectpicker
               select#game-select
                 option(value="soccer") Soccer
@@ -41,6 +41,10 @@ block content
               | 
               span#game-noun game
             button#start-button.btn.btn-default.btn-lg Start!
+
+        .outer#loading(hash-url='loading', static=true)
+          .loading
+            h4 LOADING
 
     .foot
       span sportsync

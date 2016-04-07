@@ -63,5 +63,13 @@ var general = {
     }
 
     return new Blob([ia], {type:mimeString});
+  },
+
+  tryToParse : function(text) {
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      return text;
+    }
   }
 };

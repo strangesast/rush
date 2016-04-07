@@ -16,6 +16,7 @@ var flash = require('connect-flash');
 // routes setup
 var routes = require('./routes/index');
 var account = require('./routes/account');
+var hash = require('./routes/hash');
 
 var config = require('./config'); // root config file
 var app = express();
@@ -74,6 +75,7 @@ mongoose.connect(config.databaseURL, function(err) {
 // routes implementation
 app.use('/', routes);
 app.use('/account/', account);
+app.use('/hash/', hash);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

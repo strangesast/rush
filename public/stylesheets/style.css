@@ -65,6 +65,7 @@ span.icon > a {
   opacity: 0;
 }
 .wrapper > .outer {
+  opacity: 0;
 }
 .wrapper > .outer.transitioning {
   visibility: visible;
@@ -121,48 +122,10 @@ span.icon > a {
   .head > .items > #account-dropdown-container {
     display: inherit;
   }
-  .head > .items > *:not(#account-dropdown-container) {
+  .head > .items > .alink:not(#account-dropdown-container) {
     display: none;
   }
 }
-/*
-
-.inner > .main {
-  padding: 20px;
-  font-size: 5em;
-  width: 100%;
-  color: rgba(0, 10, 50);
-}
-
-#option {
-  align-self: center;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-#option > * {
-  margin: 10px 0px;
-}
-
-#count {
-  height: 220px;
-  line-height:220px;
-  font-size: 3em;
-  font-align: middle
-}
-
-#pass {
-  height: 50px;
-  font-size: 1.5em;
-}
-
-@media (max-width: 300px ){
-  .usernames {
-    max-width: 300px; 
-  }
-}
-*/
 
 .btn-file {
   position: relative;
