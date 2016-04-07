@@ -5,7 +5,7 @@ var GameSchema = new Schema({
   name: String,
   date: Date,
   participants: [],
-  teams: [],
+  teams: [{type: Schema.Types.ObjectId, ref: 'Team'}],
   state: {
     type: Schema.Types.ObjectId,
     ref: 'GameState'

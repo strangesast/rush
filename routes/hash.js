@@ -177,7 +177,7 @@ router.get('/:gameType/events', function(req, res, next) {
 
 router.get('/:gameType/events/:eventId', function(req, res, next) {
   var gameType = req.params.eventId;
-  req.gameType.findById(req.params.eventId).populate('owner').then(function(doc) {
+  req.gameType.findById(req.params.eventId).populate('owner teams').then(function(doc) {
     if(doc) {
       // doc found!
       return tryWithFallbackGeneric(res, gameType, 'each', {object: doc}, gameType).then(function(result) {
@@ -197,10 +197,10 @@ router.get('/:gameType/events/:eventId/players', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
   return req.gameType.findById(eventId).then(function(game_doc) {
-    return Team.find({_id: { $in: game_doc.participants }}).then(function(team_docs) {
-      return Player.find({team: { $in : team_docs }}).then(function(player_docs) {
+    return Team.find({_id: { $in: game_doc.teams }}).then(function(team_docs) {
+      return Player.find({team: { $in : team_docs.map(function(e) {return e._id}) }}).populate('team').then(function(player_docs) {
         // doc found!
-        return tryWithFallbackGeneric(res, gameType, 'players', {players: player_docs, teams: team_docs}, gameType).then(function(result) {
+        return tryWithFallbackGeneric(res, gameType, 'players', {game: game_doc, players: player_docs, teams: team_docs}, gameType).then(function(result) {
           // rendered successfully
           return res.json(result);
         });
@@ -214,7 +214,7 @@ router.get('/:gameType/events/:eventId/teams', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
   return req.gameType.findById(eventId).then(function(game_doc) {
-    return Team.find({_id: { $in: game_doc.participants }}).then(function(team_docs) {
+    return Team.find({_id: { $in: game_doc.teams }}).then(function(team_docs) {
       // doc found!
       return tryWithFallbackGeneric(res, gameType, 'teams', {teams: team_docs, game: game_doc}, gameType).then(function(result) {
         // rendered successfully
@@ -291,7 +291,7 @@ router.post('/:gameType/events/:eventId/teams', upload.array(), function(req, re
     var team = new Team(body);
     return team.save().then(function(team_doc) {
       return req.gameType.findById(req.params.eventId).then(function(game_doc) {
-        game_doc.participants.push(team_doc._id);
+        game_doc.teams.push(team_doc._id);
         game_doc.save().then(function() {
           return res.json({
             doc: team_doc,
@@ -311,6 +311,7 @@ router.post('/:gameType/events/:eventId/teams', upload.array(), function(req, re
 router.post('/players', upload.array(), function(req, res, next) {
   var player = new Player(req.body);
   return player.save().then(function(player_doc) {
+    console.log(player_doc);
     return res.json({
       doc: player_doc,
       hash: null

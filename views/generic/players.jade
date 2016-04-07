@@ -1,5 +1,6 @@
 .inner
   h1 Players
+  p Players in participating teams of #{game.name}
   if players.length > 0
     each player in players
       pre=JSON.stringify(player, null, 2)

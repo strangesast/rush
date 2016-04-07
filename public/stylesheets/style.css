@@ -43,8 +43,11 @@ span.icon > a {
   flex-grow: 2;
   position: relative;
   max-width: 100vw;
+  overflow: auto;
+  /*
   overflow-y: auto;
   overflow-x: hidden;
+  */
 }
 .welcome-page {
   align-items: stretch;
