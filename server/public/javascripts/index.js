@@ -42,6 +42,7 @@ var loadByHash = function(raw_hashUrl) {
   }
   // check that a view aleady exists
   var existingElement = wrapperElement.querySelector('[hash-url="' + hashUrl + '"]');
+  console.log(hashUrl);
 
   var promise = Promise.resolve();
   if(!(existingElement && existingElement.hasAttribute('static'))) {
@@ -53,6 +54,7 @@ var loadByHash = function(raw_hashUrl) {
         window.location.href = parsed.redirect;
       }
       newHashUrl = parsed.hash;
+      console.log(newHashUrl);
       return parsed.html;
 
     }).catch(function(request) {
@@ -217,7 +219,6 @@ gameSelect.addEventListener('change', function(evt) {
 
 var startButton = document.getElementById('start-button');
 startButton.addEventListener('click', function(evt) {
-  console.log(evt);
   var val;
   if(val=gameSelect.value) {
     window.location.hash = '/' + val + '/new';

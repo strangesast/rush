@@ -26,33 +26,32 @@ block content
           a.alink.btn(href='/account/register') Register
           a.alink.btn.btn-primary(href='/account/login') Log in
       
-    .center
-      #wrapper.wrapper
-        .outer#index(hash-url='index', static=true)
-          .inner.welcome-page
-            h1.welcome-container Welcome!
+    #wrapper.wrapper.center
+      .outer#index(hash-url='index', static=true)
+        .inner.welcome-page
+          h1.welcome-container Welcome!
+          div
+            p.welcome-text
+              | Create a 
+              select#game-select
+                option(value="soccer") Soccer
+                option(value="track") Track
+                option(value="frisbe") Frisbe
+                option(value="swimming") Swimming
+              | 
+              span#game-noun game
+
+            button#start-button.btn.btn-default.btn-lg.btn-block Start!
+
+          if user
             div
-              p.welcome-text
-                | Create a 
-                select#game-select
-                  option(value="soccer") Soccer
-                  option(value="track") Track
-                  option(value="frisbe") Frisbe
-                  option(value="swimming") Swimming
-                | 
-                span#game-noun game
-
-              button#start-button.btn.btn-default.btn-lg.btn-block Start!
-
-            if user
-              div
-                h4 or
-                a.btn.btn-default.btn-block(href="/#/account/events") View your events
+              h4 or
+              a.btn.btn-default.btn-block(href="/#/account/events") View your events
 
 
-        .outer#loading(hash-url='loading', static=true)
-          .loading
-            h4 LOADING
+      .outer#loading(hash-url='loading', static=true)
+        .loading
+          h4 LOADING
 
     .foot
       span sportsync
