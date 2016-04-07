@@ -42,6 +42,7 @@ span.icon > a {
 .outermost > .center {
   flex-grow: 2;
   position: relative;
+  overflow: hidden;
 }
 .outermost > .foot {
   height: 80px;

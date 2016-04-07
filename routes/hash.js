@@ -17,7 +17,7 @@ router.get('/:gameType/new', function(req, res, next) {
   var gameType = req.params.gameType; // soccer, basketball, etc
   return tryToRender(res, gameType + '/new', {}).catch(function(err) {
     // there's no specific page 'new' for type
-    return tryToRender(res, 'generic/new', {});
+    return tryToRender(res, 'generic/new', {name: gameType});
   }).then(function(html) {
     return res.json({
       hash: gameType + '/new',

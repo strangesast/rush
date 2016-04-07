@@ -24,7 +24,6 @@ var changeHashWithoutEvent = function(hash) {
 // when doc loads, load correct hash content
 document.addEventListener('DOMContentLoaded', function() {
   var hashUrl = window.location.hash.slice(1);
-  console.log(hashUrl);
   if(hashUrl === ""){
     changeHashWithoutEvent('#/index');
   }
@@ -76,13 +75,15 @@ var loadByHash = function(raw_hashUrl) {
       }
     });
   }
-
   promise.then(function() {
     setActiveTo(newHashUrl, true, false);
   });
 };
 
 var transition = function(firstElement, secondElement, transformType) {
+  var i0 = Array.prototype.indexOf.call(wrapperElement.children, firstElement);
+  var i1 = Array.prototype.indexOf.call(wrapperElement.children, secondElement);
+  var transformType = transformType || (i0 > i1 ? 'slide' : 'sliderev');
   transitionInProgress = true;
   var f, s;
   return new Promise(function(resolve, reject) {
@@ -143,7 +144,7 @@ var setActiveTo = function(loc, animate, _long) {
   var selector = '[hash-url="' + loc + '"]';
   var div = wrapperElement.querySelector('[hash-url="' + loc + '"]');
   if(!div) {
-    alert("dom element doesn't exist");
+    return;
   }
   var oldDiv = wrapperElement.querySelector('.active');
   var loadingDiv = wrapperElement.querySelector('[hash-url="loading"]');
@@ -152,15 +153,19 @@ var setActiveTo = function(loc, animate, _long) {
     return;
   }
   if(!oldDiv) {
+    // if nothing is active, set loc to active
     div.classList.add('active');
+
   } else if(animate && _long) {
-    transition(oldDiv, loadingDiv, getTransitionType(true)).then(function() {
+    // if long running request / etc, load transition prior to loading next
+    transition(oldDiv, loadingDiv).then(function() {
       setTimeout(function() {
-        transition(loadingDiv, div, getTransitionType(true));
+        transition(loadingDiv, div);
       }, 1000);
     });
   } else if(animate) {
-    transition(oldDiv, div, getTransitionType(true));
+    transition(oldDiv, div);
+
   } else if (div !== oldDiv) {
     oldDiv.classList.remove('active');
     div.classList.add('active');
