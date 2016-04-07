@@ -26,3 +26,7 @@
     a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/players') Players
     a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/teams') Teams
     a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/displays') Displays
+    button#initialize-game.btn.btn-default(init-url="/hash/#{game._type.toLowerCase()}/events/#{game._id}/admin/init") Initialize
+
+
+  script(src="/javascripts/admin.js")

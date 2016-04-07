@@ -14,8 +14,12 @@ var Display = require('../models/display');
 var Action = require('../models/action');
 var GameState = require('../models/gamestates/gamestate');
 var GameStateFrisbe = require('../models/gamestates/gamestatefrisbe');
+var GameStateSoccer = require('../models/gamestates/gamestatesoccer');
+var GameStateTrack = require('../models/gamestates/gamestatetrack');
+var GameStateSwmming = require('../models/gamestates/gamestateswimming');
 
 var gameTypes = {'frisbe': Frisbe, 'swimming': Swimming, 'track': Track, 'soccer': Soccer};
+var gameStates = {'frisbe': GameStateFrisbe, 'swimming': GameStateSwimming, 'track': GameStateTrack, 'soccer': GameStateSoccer};
 
 var genericFailureFactory = function(_next) {
   return function(error) {
@@ -248,15 +252,15 @@ router.get('/:gameType/events/:eventId/admin', function(req, res, next) {
   }).catch(genericFailureFactory(next));
 });
 
-router.get('/frisbe/events/:eventId/admin/init', function(req, res, next) {
+router.get('/:gameType/events/:eventId/admin/init', function(req, res, next) {
   //create gamestate
-  return Frisbe.findById(req.params.eventId).populate('owner state').then(function(game_doc) {
+  return req.gameType.findById(req.params.eventId).populate('owner state').then(function(game_doc) {
     if(game_doc.teams.length !== 2) {
       var err = new Error('you need exactly 2 teams');
       res.status(400);
       return res.json({'error': err, 'message' : err.message});
     }
-    var gamestate = new GameStateFrisbe({
+    var gamestate = new gameStates[req.params.gameType.toLowerCase()]({
       team0: game_doc.teams[0],
       team1: game_doc.teams[1]
     });
@@ -310,7 +314,6 @@ router.post('/:gameType/events/:eventId/teams', upload.array(), function(req, re
     return next(err);
   }
 });
-
 
 router.post('/players', upload.array(), function(req, res, next) {
   var player = new Player(req.body);
