@@ -65,6 +65,7 @@ var loadByHash = function(raw_hashUrl) {
       } else if(request.responseText) {
         return "<div><pre>" + request.responseText + "</pre></div>";
       } else {
+        console.log(request);
         return "<div><h1>4XX/5XX Error</h1></div>";
       }
 

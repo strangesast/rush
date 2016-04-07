@@ -5,6 +5,11 @@ var GameSchema = new Schema({
   name: String,
   date: Date,
   participants: [],
+  teams: [],
+  state: {
+    type: Schema.Types.ObjectId,
+    ref: 'GameState'
+  },
   owner: {
     type: Schema.Types.ObjectId,
     required: true,

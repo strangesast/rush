@@ -1,0 +1,26 @@
+.inner
+  // gamestate stuff
+  h1 Admin for #{game.name}
+
+  if game.state
+    h3 Players
+    each player in game.state.players
+      pre=JSON.stringify(player, null, 2)
+
+    h3 Teams
+    each team in game.state.teams
+      pre=JSON.stringify(team, null, 2)
+
+    h3 Actions
+    each action in game.state.actions
+      pre=JSON.stringify(action, null, 2)
+
+  else
+    // game hasn't been initialized
+    h1 Game hasn't been initialized
+
+  h2.welcome-container Add players or teams or displays to your event
+  .options
+    a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/players') Players
+    a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/teams') Teams
+    a.btn.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/displays') Displays

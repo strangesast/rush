@@ -7,8 +7,4 @@ div.inner
   pre=JSON.stringify(object, null, 2)
 
   if (user && user.id == object.owner._id)
-    h2.welcome-container Add players or teams or displays to your event
-    .options
-      a.btn.btn-default(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/players') Players
-      a.btn.btn-default(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/teams') Teams
-      a.btn.btn-default(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/displays') Displays
+    a.btn.btn-default.btn-block(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/admin') Administer

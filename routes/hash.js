@@ -3,14 +3,17 @@ var router = express.Router();
 var multer = require('multer');
 var upload = multer();
 var util = require('util');
-var Game = require('../models/game');
-var Frisbe = require('../models/frisbe');
-var Swimming = require('../models/swimming');
-var Track = require('../models/track');
-var Soccer = require('../models/soccer');
+var Game = require('../models/games/game');
+var Frisbe = require('../models/games/frisbe');
+var Swimming = require('../models/games/swimming');
+var Track = require('../models/games/track');
+var Soccer = require('../models/games/soccer');
 var Player = require('../models/player');
 var Team = require('../models/team');
 var Display = require('../models/display');
+var Action = require('../models/action');
+var GameState = require('../models/gamestates/gamestate');
+var GameStateFrisbe = require('../models/gamestates/gamestatefrisbe');
 
 var gameTypes = {'frisbe': Frisbe, 'swimming': Swimming, 'track': Track, 'soccer': Soccer};
 
@@ -94,6 +97,33 @@ router.param('gameType', function(req, res, next, gameType) {
   }
 });
 
+router.get('/teams', function(req, res, next) {
+  return Team.find({}).then(function(team_docs) {
+    return tryToRender(res, 'teams', {teams: team_docs}).then(function(html) {
+      return res.json({
+        hash: '/teams',
+        html: html
+      });
+    }).catch(function(err) {
+      return next(err);
+    });
+  });
+});
+
+router.get('/players', function(req, res, next) {
+  return Player.find({}).then(function(player_docs) {
+    return tryToRender(res, 'players', {teams: player_docs}).then(function(html) {
+      return res.json({
+        hash: '/players',
+        html: html
+      });
+    }).catch(function(err) {
+      return next(err);
+    });
+  });
+
+});
+
 // plain page with game description, current instances of game, etc
 router.get('/:gameType', function(req, res, next) {
   var gameType = req.params.gameType; // soccer, basketball, etc
@@ -161,10 +191,10 @@ router.get('/:gameType/events/:eventId/players', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
   return req.gameType.findById(eventId).then(function(game_doc) {
-    return Team.find({id: { $in: game_doc.participants }}).select('id').then(function(team_docs) {
+    return Team.find({_id: { $in: game_doc.participants }}).then(function(team_docs) {
       return Player.find({team: { $in : team_docs }}).then(function(player_docs) {
         // doc found!
-        return tryWithFallbackGeneric(res, gameType, 'players', {players: player_docs}, gameType).then(function(result) {
+        return tryWithFallbackGeneric(res, gameType, 'players', {players: player_docs, teams: team_docs}, gameType).then(function(result) {
           // rendered successfully
           return res.json(result);
         });
@@ -178,10 +208,9 @@ router.get('/:gameType/events/:eventId/teams', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
   return req.gameType.findById(eventId).then(function(game_doc) {
-    console.log(game_doc.participants);
-    return Team.find({id: { $in: game_doc.participants }}).select('id').then(function(team_docs) {
+    return Team.find({_id: { $in: game_doc.participants }}).then(function(team_docs) {
       // doc found!
-      return tryWithFallbackGeneric(res, gameType, 'teams', {teams: team_docs}, gameType).then(function(result) {
+      return tryWithFallbackGeneric(res, gameType, 'teams', {teams: team_docs, game: game_doc}, gameType).then(function(result) {
         // rendered successfully
         return res.json(result);
       });
@@ -202,21 +231,84 @@ router.get('/:gameType/events/:eventId/displays', function(req, res, next) {
   }).catch(genericFailureFactory(next));
 });
 
+// gamestate
+router.get('/:gameType/events/:eventId/admin', function(req, res, next) {
+  var eventId = req.params.eventId;
+  var gameType = req.params.gameType;
+  return req.gameType.findById(req.params.eventId).populate('owner state').then(function(game_doc) {
+    return tryWithFallbackGeneric(res, gameType, 'admin', {game: game_doc}, gameType).then(function(result) {
+      return res.json(result);
+    });
+  }).catch(genericFailureFactory(next));
+});
 
-router.get('/:gameType/events/:eventId/displays', function(req, res, next) {
-  var gameType = req.params.eventId;
-  req.gameType.findById(req.params.eventId).populate('owner').then(function(doc) {
-    if(doc) {
-      // doc found!
-      return tryWithFallbackGeneric(res, gameType, 'each', {object: doc}, gameType).then(function(result) {
-        // rendered successfully
-        return res.json(result);
-      }).catch(genericFailureFactory(next));
-    } else {
-      // not found
-      return next();
+router.get('/frisbe/events/:eventId/admin/init', function(req, res, next) {
+  //create gamestate
+  return Frisbe.findById(req.params.eventId).populate('owner state').then(function(game_doc) {
+    if(game_doc.teams.length !== 2) {
+      var err = new Error('you need exactly 2 teams');
+      res.status(400);
+      return res.json({'error': err, 'message' : err.message});
     }
+    game_doc.state = new GameStateFrisbe({
+      team0: this.teams[0],
+      team1: this.teams[1]
+    });
+    game_doc.save();
+    return res.json({game: game_doc});
+  }).catch(genericFailureFactory(next));
+});
 
+router.post('/teams', upload.array(), function(req, res, next) {
+  if(req.user) {
+    var body = req.body;
+    body.owner = req.user._id;
+    var team = new Team(body);
+    return team.save().then(function(team_doc) {
+      return res.json({
+        doc: team_doc,
+        hash: null
+      });
+    }).catch(genericFailureFactory(next));
+  } else {
+    var err = new Error('must be logged in');
+    err.status = 401;
+    return next(err);
+  }
+});
+
+// basically the same as above, but with adding to game participants
+router.post('/:gameType/events/:eventId/teams', upload.array(), function(req, res, next) {
+  if(req.user) {
+    var body = req.body;
+    body.owner = req.user._id;
+    var team = new Team(body);
+    return team.save().then(function(team_doc) {
+      return req.gameType.findById(req.params.eventId).then(function(game_doc) {
+        game_doc.participants.push(team_doc._id);
+        game_doc.save().then(function() {
+          return res.json({
+            doc: team_doc,
+            hash: null
+          });
+        })
+      });
+    }).catch(genericFailureFactory(next));
+  } else {
+    var err = new Error('must be logged in');
+    err.status = 401;
+    return next(err);
+  }
+});
+
+
+router.post('/players', upload.array(), function(req, res, next) {
+  var player = new Player(req.body);
+  return player.save().then(function(player_doc) {
+    return res.json({
+      doc: player_doc,
+      hash: null
+    });
   }).catch(genericFailureFactory(next));
 });
 

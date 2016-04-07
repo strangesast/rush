@@ -6,3 +6,14 @@
 
   else
     p no teams
+
+  form#new-team-form.form-signin(role='form', action='/hash/#{game._type.toLowerCase()}/events/#{game._id}/teams', method='POST')
+    h2.form-signin-heading New team
+    .form-group
+      input.form-control(type='text', name='name', placeholder='cool team name')
+
+    button.btn.btn-primary.btn-block(type='submit') Submit
+
+    div#new-team-messages
+
+  script(src='/javascripts/teamcreation.js')

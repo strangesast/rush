@@ -7,4 +7,19 @@
   else
     p no players
 
-  // create new players
+  if teams && teams.length > 0
+    form#new-player-form.form-signin(role='form', action='/hash/players', method='POST')
+      h2.form-signin-heading New player
+      .form-group
+        input.form-control(type='text', name='name', placeholder='cool player name')
+      .form-group
+        label(for="team-name-select") Team name
+        select#team-name-select.form-control(name='team')
+          for team in teams
+            option(value=team._id) #{team.name}
+
+      button.btn.btn-primary.btn-block(type='submit') Submit
+
+  else
+    h2.form-signin-heading New player
+    p Error! you must create a team before creating any players

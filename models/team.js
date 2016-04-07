@@ -2,7 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Team = new Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true
+  },
   owner: {
     type: Schema.Types.ObjectId,
     required: true,

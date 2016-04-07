@@ -127,7 +127,7 @@ span.icon > a {
   min-width: 200px;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: column;
   margin: 10px;
   /*overflow-y: auto;*/
   padding: 0 8px;
