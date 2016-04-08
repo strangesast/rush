@@ -5,11 +5,31 @@
 
   if game.state
     - var teamsById = game.teams.reduce(function(prev, curr) {prev[curr._id] = curr; return prev}, {});
+    h3 Game time
+    - var tms = game.state.endtime ? (game.start.endtime - game.state.starttime) : (Date.now() - game.state.starttime)
+    h4#game-time(start-time="#{game.state.starttime.getTime()}", end-time="#{game.state.endtime ? game.state.endtime.getTime() : null}") #{tms}
+    .control-buttons
+      span.btn.btn-lg.btn-default
+        | Stop
+      span.btn.btn-lg.btn-default
+        | Start
+
     h3 Team 1: "#{teamsById[game.state.team0].name}"
     h4 Score: #{game.state.team0score}
+    .control-buttons
+      span.btn.btn-lg.btn-default
+        span.glyphicon.glyphicon-plus
+      span.btn.btn-lg.btn-default
+        span.glyphicon.glyphicon-minus
     h3 Team 2: "#{teamsById[game.state.team1].name}"
     h4 Score: #{game.state.team1score}
-    div
+    .control-buttons
+      span.btn.btn-lg.btn-default
+        span.glyphicon.glyphicon-plus
+      span.btn.btn-lg.btn-default
+        span.glyphicon.glyphicon-minus
+
+    .initialize-container
       button#initialize-game.btn.btn-lg.btn-default(init-url="/hash/#{game._type.toLowerCase()}/events/#{game._id}/admin/init") Initialize (reset game state)
 
   else

@@ -169,6 +169,16 @@ span.icon > a {
 .admin-page {
   flex-wrap: nowrap;
 }
+.control-buttons {
+  display: flex;
+  min-height: 50px;
+}
+.initialize-container {
+  margin: 20px 0;
+}
+.control-buttons > * {
+  margin: 0 10px;
+}
 .event-list-page {
   flex-direction: column;
   flex-wrap: nowrap;
@@ -204,6 +214,10 @@ span.icon > a {
 }
 .inner * select {
   color: initial;
+}
+.inner .btn > *, .inner .btn {
+  color: initial;
+  text-shadow: none;
 }
 .inner > h3 > select {
   color: black;

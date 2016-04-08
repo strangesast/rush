@@ -266,7 +266,8 @@ router.get('/:gameType/events/:eventId/admin/init', function(req, res, next) {
     }
     var gamestate = new gameStates[req.params.gameType.toLowerCase()]({
       team0: game_doc.teams[0],
-      team1: game_doc.teams[1]
+      team1: game_doc.teams[1],
+      starttime: Date.now()
     });
     return gamestate.save().then(function(gamestate_doc) {
       game_doc.state = gamestate_doc._id;

@@ -24,8 +24,8 @@ GameStateFrisbe = GameStateSchema.extend({
     required: true,
     ref: 'Team'
   },
-  timestart: Date,
-  timeend: Date
+  starttime: Date,
+  endtime: Date
 });
 
 module.exports = mongoose.model('GameStateFrisbe', GameStateFrisbe);
