@@ -10,6 +10,9 @@ html, body {
     local("Open Sans"),
     url("/components/open-sans-fontface/fonts/Regular/OpenSans-Regular.ttf");
 }
+.github > img {
+  margin:10px;
+}
 .outermost {
   display: flex;
   flex-direction: column;
@@ -88,7 +91,7 @@ span.icon > a {
   display: flex;
   justify-content: center;
 }
-.outermost > .foot > span {
+.outermost > .foot > span, .outermost > .foot > a {
   margin: 12px;
   line-height: 55px;
   color: white;
