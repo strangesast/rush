@@ -184,6 +184,7 @@ span.icon > a {
   margin: 10px 0;
 }
 .action-container:empty:after {
+  color: white;
   content: "No actions... yet";
 }
 .welcome-page {
@@ -195,7 +196,7 @@ span.icon > a {
 .new-game-page {
   min-width: 300px;
 }
-.inner h1, .inner h2, .inner h3, .inner p, .inner span, .inner li, .inner label {
+.inner h1, .inner h2, .inner h3, .inner h4, .inner p, .inner span, .inner li, .inner label .inner :after {
   color: white;
   text-shadow: 1px 1px 4px #2a5a83;
 }
