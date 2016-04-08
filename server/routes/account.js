@@ -50,7 +50,7 @@ router.route('/login')
 
 router.get('/logout', function(req, res) {
   req.logout();
-  return res.redirect('/account/');
+  return res.redirect('/');
 });
 
 module.exports = router;

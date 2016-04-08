@@ -7,6 +7,7 @@ block content
         a(href='/') sportsync
       .items
         if user
+          a(href="/account/logout") logout
           a(href="/#/account/") #{user.username}
 
         else
@@ -46,7 +47,7 @@ block content
           if user
             div
               h4 or
-              a.btn.btn-default.btn-block(href="/#/account/events") View your events
+              a.btn.btn-lg.btn-default(href="/#/account/events") View your events
 
 
       .outer#loading(hash-url='loading', static=true)

@@ -1,0 +1,22 @@
+div.inner.game-each-container
+  h1 Frisbe game #{object.name}
+  if object.state
+    - var teamsById = object.teams.reduce(function(prev, curr) {prev[curr._id] = curr; return prev}, {});
+    - var team0 = teamsById[object.state.team0]
+    - var team1 = teamsById[object.state.team1]
+
+    h3 Game initialized
+    h4 #{team0.name} vs. #{team1.name}
+    h4 score: #{object.state.team0score}, #{object.state.team0score}
+    h3 Last actions
+    .action-container
+      each action in object.state.actions
+        pre=JSON.stringify(action, null, 2)
+
+  else 
+    h3 Game not initialized
+
+  if user
+    a.btn.btn-lg.btn-default.btn-block(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/admin') Administer
+
+  //pre=JSON.stringify(object, null, 2)

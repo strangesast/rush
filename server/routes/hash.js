@@ -181,11 +181,13 @@ router.get('/:gameType/events', function(req, res, next) {
 router.get('/:gameType/events/:eventId', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
-  req.gameType.findById(req.params.eventId).populate('owner teams').then(function(doc) {
-    if(doc) {
+  req.gameType.findById(req.params.eventId).populate('owner teams state').then(function(game_doc) {
+    if(game_doc) {
+      var team_ids = game_doc.teams.map(function(team) {return team._id});
+      //Player.find({
       // doc found!
       //tryWithFallbackGeneric = function(_res, root, path, params, objectName) {
-      return tryWithFallbackGeneric(res, gameType + '/events/' + doc._id, 'each', {object: doc}, gameType).then(function(result) {
+      return tryWithFallbackGeneric(res, gameType + '/events/' + game_doc._id, 'each', {object: game_doc}, gameType).then(function(result) {
         // rendered successfully
         console.log(result);
         return res.json(result);
@@ -247,7 +249,7 @@ router.get('/:gameType/events/:eventId/displays', function(req, res, next) {
 router.get('/:gameType/events/:eventId/admin', function(req, res, next) {
   var eventId = req.params.eventId;
   var gameType = req.params.gameType;
-  return req.gameType.findById(req.params.eventId).populate('owner state').then(function(game_doc) {
+  return req.gameType.findById(req.params.eventId).populate('owner teams state').then(function(game_doc) {
     return tryWithFallbackGeneric(res, gameType + '/events/' + game_doc._id + '/admin', 'admin', {game: game_doc}, gameType).then(function(result) {
       return res.json(result);
     });

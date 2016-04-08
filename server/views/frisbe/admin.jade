@@ -1,0 +1,27 @@
+.inner.admin-page
+  h1 Admin for (Frisbe) game "#{game.name}"
+
+  h3 On #{String(game.date).slice(0, 16)}
+
+  if game.state
+    - var teamsById = game.teams.reduce(function(prev, curr) {prev[curr._id] = curr; return prev}, {});
+    h3 Team 1: "#{teamsById[game.state.team0].name}"
+    h4 Score: #{game.state.team0score}
+    h3 Team 2: "#{teamsById[game.state.team1].name}"
+    h4 Score: #{game.state.team1score}
+    div
+      button#initialize-game.btn.btn-lg.btn-default(init-url="/hash/#{game._type.toLowerCase()}/events/#{game._id}/admin/init") Initialize (reset game state)
+
+  else
+    p Not yet initialized
+    div
+      button#initialize-game.btn.btn-lg.btn-default(init-url="/hash/#{game._type.toLowerCase()}/events/#{game._id}/admin/init") Initialize
+    h3 Requirements to begin.
+    ul.requirements-list
+      if game.teams.length != 2
+        li You must have 2 teams
+
+  .button-list
+    a.btn.btn-lg.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/players') Players
+    a.btn.btn-lg.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/teams') Teams
+    a.btn.btn-lg.btn-default(href='/#/#{game._type.toLowerCase()}/events/#{game._id}/displays') Displays

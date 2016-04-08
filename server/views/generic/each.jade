@@ -1,10 +1,15 @@
-div.inner
-  h1.welcome-container #{object.name}
-  div
-    ul
-      li Owner: #{object.owner.name}
-      li Date: #{object.date}
+div.inner.game-each-container
+  h1 #{object.name} <small>#{object._type} Event</small>
+  h3 On #{String(object.date).slice(0, 21)}
+  h3 Created by: #{object.owner.username}
   pre=JSON.stringify(object, null, 2)
 
   if (user && user.id == object.owner._id)
     a.btn.btn-default.btn-block(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/admin') Administer
+
+
+  if object.state
+    p Initialized
+
+  else
+    p Not yet initialized.  You'll see more here when it is.
