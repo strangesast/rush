@@ -54,12 +54,6 @@ span.icon > a {
 }
 
 
-.welcome-page > * {
-  flex-grow: 2;
-}
-.welcome-page .welcome-text {
-  font-size: 1.5em;
-}
 #start-button {
 }
 .options > a {
@@ -153,6 +147,14 @@ span.icon > a {
   margin: 10px;
   /*overflow-y: auto;*/
   padding: 0 8px;
+}
+
+.welcome-page > * {
+  flex-grow: 2;
+  flex-wrap: nowrap;
+}
+.welcome-page .welcome-text {
+  font-size: 1.5em;
 }
 .game-each-container {
   flex-wrap: nowrap;
