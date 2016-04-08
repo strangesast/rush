@@ -1,8 +1,9 @@
-.inner
+.inner.teams-page
   h1 Teams
   if teams.length > 0
-    each team in teams
-      pre=JSON.stringify(team, null, 2)
+    .list-group
+      each team in teams
+        .list-group-item #{team.name}
 
   else
     p no teams

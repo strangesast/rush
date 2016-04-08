@@ -53,6 +53,7 @@ span.icon > a {
   */
 }
 
+
 .welcome-page > * {
   flex-grow: 2;
 }
@@ -153,6 +154,16 @@ span.icon > a {
   /*overflow-y: auto;*/
   padding: 0 8px;
 }
+.game-each-container {
+  flex-wrap: nowrap;
+}
+.players-page {
+  flex-wrap: nowrap;
+}
+.teams-page {
+  flex-wrap: nowrap;
+  min-width: 300px;
+}
 .admin-page {
   flex-wrap: nowrap;
 }
@@ -184,9 +195,12 @@ span.icon > a {
 .new-game-page {
   min-width: 300px;
 }
-.inner > h1, .inner > h3, .inner > p, .inner > span {
+.inner h1, .inner h2, .inner h3, .inner p, .inner span, .inner li, .inner label {
   color: white;
   text-shadow: 1px 1px 4px #2a5a83;
+}
+.inner * select {
+  color: initial;
 }
 .inner > h3 > select {
   color: black;

@@ -2,10 +2,9 @@ div.inner.game-each-container
   h1 #{object.name} <small>#{object._type} Event</small>
   h3 On #{String(object.date).slice(0, 21)}
   h3 Created by: #{object.owner.username}
-  pre=JSON.stringify(object, null, 2)
 
   if (user && user.id == object.owner._id)
-    a.btn.btn-default.btn-block(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/admin') Administer
+    a.btn.btn-lg.btn-default.btn-block(href='/#/#{object._type.toLowerCase()}/events/#{object._id}/admin') Administer
 
 
   if object.state

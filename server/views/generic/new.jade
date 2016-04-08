@@ -1,10 +1,12 @@
-.new-game-page
+.inner.new-game-page
+  h1.form-signin-heading New #{objectname} event
   form#new-object-form(role='form', action='/hash/#{objectname}/new', method='POST')
-    h1.form-signin-heading New #{objectname} event
     .form-group
-      input.form-control(type='text', name='name', placeholder='event name')
+      label(for="event-name") Name
+      input#event-name.form-control(type='text', name='name', placeholder='event name')
     .form-group
-      input.form-control(type='datetime-local', name='date', value=(new Date()).toISOString().slice(0, 16))
+      label(for="event-date") Start date
+      input#event-date.form-control(type='datetime-local', name='date', value=(new Date()).toISOString().slice(0, 16))
   
     button.btn.btn-primary.btn-block(type='submit') Submit
   

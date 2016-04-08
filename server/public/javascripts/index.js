@@ -211,6 +211,9 @@ gameSelect.addEventListener('change', function(evt) {
     case "swimming":
       newval = "meet";
       break;
+    case "track":
+      newval = "meet";
+      break;
     default: 
       newval = "game";
   }

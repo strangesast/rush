@@ -2,8 +2,6 @@
   // gamestate stuff
   h1 Admin for #{game.name}
 
-  pre=JSON.stringify(game, null, 2)
-
   if game.state
     h3 Players
     each player in game.state.players
@@ -19,7 +17,7 @@
 
   else
     // game hasn't been initialized
-    h1 Game hasn't been initialized
+    h2 Game hasn't been initialized
 
   h2.welcome-container Add players or teams or displays to your event
   .options
