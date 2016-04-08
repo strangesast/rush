@@ -278,6 +278,50 @@ router.get('/:gameType/events/:eventId/admin/init', function(req, res, next) {
   }).catch(genericFailureFactory(next));
 });
 
+router.post('/:gameType/events/:eventId/action', function(req, res, next) {
+  if(req.user) {
+    var body = req.body;
+    var actions = body.actions;
+    var owner = req.user._id;
+    req.gameType.findById(req.params.eventId).populate('state').then(function(game_doc) {
+      if(!game_doc.state) {
+        var err = new Error('game not initialized')
+        err.status = 400;
+        return Promise.reject(err);
+      }
+      var promises = actions.map(function(action) {
+        var type = action.type; // update, etc
+        var tag = action.tag;   // what's being modified
+        var value = action.value;  // new value
+        var oldvalue = action.oldvalue;
+        if(!(tag in game_doc.state)) {
+          return Promise.reject(new Error('tag doesnt exist'));
+        }
+        var action = new Action({
+          parent: game_doc.state._id,
+          value: value,
+          tag: tag,
+          oldvalue: oldvalue,
+          type: type,
+          owner: owner
+        });
+        return action.save();
+      });
+      return Promise.all(promises);
+    }).then(function(actions) {
+      return res.json({'actions' : actions});
+
+    }).catch(function(err) {
+      return next(err);
+    });
+  } else {
+    var err = new Error('must be logged in');
+    err.status = 401;
+    return next(err);
+  }
+
+});
+
 router.post('/teams', upload.array(), function(req, res, next) {
   if(req.user) {
     var body = req.body;

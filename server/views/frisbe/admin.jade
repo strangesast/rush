@@ -4,29 +4,32 @@
   h3 On #{String(game.date).slice(0, 16)}
 
   if game.state
+    - var actionUrl = '/hash/' + game._type.toLowerCase() + '/events/' + game._id + '/action'
     - var teamsById = game.teams.reduce(function(prev, curr) {prev[curr._id] = curr; return prev}, {});
     h3 Game time
     - var tms = game.state.endtime ? (game.start.endtime - game.state.starttime) : (Date.now() - game.state.starttime)
-    h4#game-time(start-time="#{game.state.starttime.getTime()}", end-time="#{game.state.endtime ? game.state.endtime.getTime() : null}") #{tms}
+    h4#game-time(name='time', action-url="#{actionUrl}", start-time="#{game.state.starttime.getTime()}", end-time="#{game.state.endtime ? game.state.endtime.getTime() : null}") #{tms}
     .control-buttons
-      span.btn.btn-lg.btn-default
+      span#game-time-stop.btn.btn-lg.btn-default
         | Stop
-      span.btn.btn-lg.btn-default
+      span#game-time-start.btn.btn-lg.btn-default
         | Start
 
     h3 Team 1: "#{teamsById[game.state.team0].name}"
-    h4 Score: #{game.state.team0score}
+    h4 Score:
+      span#team0-score(name='team0score', action-url="#{actionUrl}") #{game.state.team0score}
     .control-buttons
-      span.btn.btn-lg.btn-default
+      span#team0-score-up.btn.btn-lg.btn-default
         span.glyphicon.glyphicon-plus
-      span.btn.btn-lg.btn-default
+      span#team0-score-down.btn.btn-lg.btn-default
         span.glyphicon.glyphicon-minus
     h3 Team 2: "#{teamsById[game.state.team1].name}"
-    h4 Score: #{game.state.team1score}
+    h4 Score:
+      span#team1-score(name='team1score', action-url="#{actionUrl}") #{game.state.team1score}
     .control-buttons
-      span.btn.btn-lg.btn-default
+      span#team1-score-up.btn.btn-lg.btn-default
         span.glyphicon.glyphicon-plus
-      span.btn.btn-lg.btn-default
+      span#team1-score-down.btn.btn-lg.btn-default
         span.glyphicon.glyphicon-minus
 
     .initialize-container

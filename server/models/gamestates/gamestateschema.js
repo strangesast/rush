@@ -3,8 +3,7 @@ var Schema = mongoose.Schema;
 
 var GameStateSchema = new Schema({
   players: [{type: Schema.Types.ObjectId, ref: 'Player'}],
-  teams: [{type: Schema.Types.ObjectId, ref: 'Team'}],
-  actions: [{type: Schema.Types.ObjectId, ref: 'Action'}],
+  teams: [{type: Schema.Types.ObjectId, ref: 'Team'}]
 }, {
   collection : 'gamestates',
   discriminatorKey : '_type'
