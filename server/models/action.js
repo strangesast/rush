@@ -24,7 +24,7 @@ var Action = new Schema({
 
 Action.pre('save', function(next) {
   var _this = this;
-  GameState.findById(this.parent).then(function(parent_doc) {
+  return GameState.findById(this.parent).then(function(parent_doc) {
     if(parent_doc[_this.tag] === _this.oldvalue) {
       parent_doc[_this.tag] = _this.value;
     } else {
