@@ -3,5 +3,7 @@ basic version of `sportsync` application for collecting, synchronizing, displayi
 
 ## setup (on ubuntu 16.04)
 * install nodejs [with apt](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-* install mongodb with the workaround described [here](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04)
-* gather required npm packages with `npm install` in the project root
+* install mongodb
+* gather required npm packages with `npm install` and `bower install` in the project root
+* update `config.js` file with correct board port/address and db location
+* start with `npm start` or with a copy of `configuration/start.sh`
